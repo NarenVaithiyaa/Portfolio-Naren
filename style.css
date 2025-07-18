@@ -1,0 +1,1211 @@
+body {
+            font-family: 'Space Mono', monospace; /* Retro body font */
+            scroll-behavior: smooth; /* Smooth scrolling for anchor links */
+            background-color: transparent; /* Make body background transparent to show canvas */
+            color: #4A4A4A; /* Darker retro text color */
+            overflow-x: hidden; /* Prevent horizontal scroll due to canvas */
+        }
+        h1, h2, h3 {
+            font-family: 'VT323', monospace; /* Pixelated retro heading font */
+        }
+
+        /* Custom scrollbar for better aesthetics */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+            cursor: grab;
+        }
+
+        /* Define keyframes for hero section animations if not using Tailwind's built-in ones */
+        @keyframes fade-in-down {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fade-in-up {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in-down {
+            animation: fade-in-down 1s ease-out forwards;
+        }
+
+        .animate-fade-in-up {
+            animation: fade-in-up 1s ease-out forwards;
+        }
+
+        /* Retro card styling (reused for skill items) */
+        .retro-card {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border: 2px solid #d1d5db;
+            transform: scale(1);
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .retro-card:hover {
+            transform: scale(1.05);
+        }
+
+        /* Retro project card styling */
+        .retro-project-card {
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            overflow: hidden;
+            border: 2px solid #d1d5db;
+            transform: scale(1);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .retro-project-card:hover {
+            transform: scale(1.05);
+        }
+
+        /* Mouse scroll animation */
+        .mouse-scroll-container {
+            position: absolute;
+            bottom: 2rem; /* Adjust as needed */
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: white;
+            opacity: 0; /* Start hidden for animation */
+        }
+
+        .mouse-icon {
+            width: 25px;
+            height: 40px;
+            border: 2px solid white;
+            border-radius: 15px;
+            position: relative;
+        }
+
+        .mouse-wheel {
+            width: 4px;
+            height: 8px;
+            background-color: white;
+            border-radius: 2px;
+            position: absolute;
+            top: 6px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* Canvas background styling */
+        #dotCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Ensure it's behind content */
+            /* Background color will be drawn by JS now */
+        }
+
+        /* --- Contact Form Styles (Retro-themed adaptation) --- */
+        .form {
+            --input-focus: #F59E0B; /* Tailwind amber-500 */
+            --font-color: #4A4A4A; /* Darker retro text color */
+            --font-color-sub: #6B7280; /* Tailwind gray-500 */
+            --bg-color: #FDFCEF; /* Light yellow from retro theme */
+            --main-color: #B45309; /* Tailwind amber-800 for borders/shadows */
+            padding: 20px;
+            background: #FDFCEF; /* Light yellow background for the form */
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            gap: 20px;
+            border-radius: 5px;
+            border: 2px solid var(--main-color);
+            box-shadow: 4px 4px var(--main-color);
+            font-family: 'Space Mono', monospace; /* Apply retro font */
+            width: 100%; /* Make form responsive */
+            max-width: 400px; /* Limit form width */
+            margin: 0 auto; /* Center the form */
+        }
+
+        .form .title {
+            color: var(--font-color);
+            font-family: 'VT323', monospace; /* Pixelated font for title */
+            font-weight: 900;
+            font-size: 28px; /* Larger title */
+            margin-bottom: 15px; /* Adjusted margin */
+            text-align: center;
+            width: 100%;
+        }
+
+        .form .title span {
+            color: var(--font-color-sub);
+            font-weight: 600;
+            font-size: 20px; /* Adjusted size */
+        }
+
+        .form .input, .form textarea {
+            width: 100%; /* Full width */
+            padding: 10px 15px; /* Increased padding */
+            border-radius: 5px;
+            border: 2px solid var(--main-color);
+            background-color: var(--bg-color);
+            box-shadow: 4px 4px var(--main-color);
+            font-size: 16px; /* Larger font size */
+            font-weight: 600;
+            color: var(--font-color);
+            outline: none;
+            box-sizing: border-box; /* Include padding in width */
+        }
+
+        .form textarea {
+            min-height: 120px; /* Make textarea taller */
+            resize: vertical; /* Allow vertical resizing */
+        }
+
+        .form .input::placeholder, .form textarea::placeholder {
+            color: var(--font-color-sub);
+            opacity: 0.8;
+        }
+
+        .form .input:focus, .form textarea:focus {
+            border: 2px solid var(--input-focus);
+        }
+
+        .form .button-confirm {
+            margin: 30px auto 0 auto; /* Adjusted margin */
+            width: 180px; /* Wider button */
+            height: 50px; /* Taller button */
+            border-radius: 5px;
+            border: 2px solid var(--main-color);
+            background-color: var(--bg-color);
+            box-shadow: 4px 4px var(--main-color);
+            font-size: 18px; /* Larger font */
+            font-weight: 600;
+            color: var(--font-color);
+            cursor: pointer;
+            font-family: 'VT323', monospace; /* Apply retro font */
+            text-transform: uppercase; /* Uppercase for retro feel */
+        }
+
+        .form .button-confirm:active {
+            box-shadow: 0px 0px var(--main-color);
+            transform: translate(3px, 3px);
+        }
+
+        /* --- Contact Form Messages --- */
+        .form-messages {
+            margin-top: 20px;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .message {
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            font-family: 'Space Mono', monospace;
+            margin-bottom: 15px;
+            border: 2px solid;
+            box-shadow: 4px 4px 0px;
+        }
+
+        .success-message {
+            background-color: #d4fdd4; /* Light green background */
+            border-color: #22c55e; /* Green border */
+            color: #166534; /* Dark green text */
+            box-shadow: 4px 4px 0px #22c55e;
+        }
+
+        .success-message h3 {
+            font-family: 'VT323', monospace;
+            font-size: 1.4em;
+            margin-bottom: 10px;
+            color: #166534;
+        }
+
+        .error-message {
+            background-color: #fef2f2; /* Light red background */
+            border-color: #ef4444; /* Red border */
+            color: #dc2626; /* Dark red text */
+            box-shadow: 4px 4px 0px #ef4444;
+        }
+
+        .error-message h3 {
+            font-family: 'VT323', monospace;
+            font-size: 1.4em;
+            margin-bottom: 10px;
+            color: #dc2626;
+        }
+
+        /* Button loading state */
+        .button-confirm.loading {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .btn-loading {
+            color: #6B7280;
+        }
+
+        /* Pop-up Button Styling */
+        .popup-button {
+            /* typography */
+            font-size: 22px;
+            font-weight: 600;
+            font-family: 'Space Mono', monospace; /* Consistent retro font */
+            text-transform: uppercase;
+            letter-spacing: 1px;
+
+            /* ui */
+            border: 4px solid #000000; /* Strong black border */
+            cursor: pointer;
+            display: inline-block;
+            padding: 12px 35px;
+            border-radius: 8px;
+            background: #FFD700; /* Bright Gold/Yellow for visibility */
+            color: #000000; /* Black text for maximum contrast */
+            box-shadow: 0 0 0 3px #B45309, 0 6px 0 #B45309; /* Using amber-800 for shadow */
+            transition: all 0.1s ease, background 0.3s ease;
+
+            position: relative;
+            z-index: 100; /* Very high z-index */
+            opacity: 1; /* Ensure it's visible immediately */
+        }
+
+        .popup-button:hover,
+        .popup-button:focus {
+            background: #E6C200; /* Slightly darker gold on hover */
+        }
+
+        .popup-button:active {
+            box-shadow: 0 0 0 3px #B45309, 0 4px 0 #B45309;
+            transform: translateY(2px);
+        }
+
+        /* Pop-up Overlay and Content Styling */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7); /* Dark overlay */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000; /* On top of everything */
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .popup-overlay.is-open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .popup-content {
+            background-color: #fefcd0; /* Light yellow from user's request */
+            border: 4px solid black; /* Black border from user's request */
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            max-width: 90%;
+            width: 400px;
+            box-shadow: 8px 8px 0px #c381b5; /* Base background color as shadow */
+            font-family: 'Space Mono', monospace;
+            color: black; /* Text color from user's request */
+            transform: scale(0.8);
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .popup-overlay.is-open .popup-content {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .popup-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 28px;
+            cursor: pointer;
+            color: black;
+            font-family: 'VT323', monospace;
+            background: none;
+            border: none;
+            padding: 0;
+            line-height: 1;
+        }
+        .popup-message {
+            font-size: 1.2em;
+            margin-top: 15px;
+            line-height: 1.5;
+        }
+
+        /* --- Timeline Styles --- */
+        .timeline {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px 0;
+            padding-top: 0; /* Adjust top padding if needed */
+        }
+
+        .timeline-line-base, .timeline-line-fill {
+            position: absolute;
+            width: 6px; /* Thickness of the line */
+            left: 50%;
+            transform: translateX(-50%);
+            top: 0;
+            height: 100%; /* Base line covers full height */
+            background-color: #B45309; /* Retro brown/amber */
+            z-index: 0;
+            border-radius: 3px; /* Rounded edges for smoother glow */
+        }
+
+        .timeline-line-fill {
+            background-color: #F6781E; /* Retro orange, for progression */
+            height: 0; /* Starts at 0, animated by GSAP */
+            z-index: 1;
+            border-radius: 3px; /* Rounded edges for smoother glow */
+            box-shadow: 
+                0 0 10px #F6781E,     /* Inner glow */
+                0 0 20px #F6781E,     /* Medium glow */
+                0 0 30px #F6781E,     /* Outer glow */
+                0 0 40px #FF8C00;     /* Extended glow with slightly different color */
+            animation: neonPulse 2s ease-in-out infinite alternate; /* Subtle pulsing effect */
+        }
+
+        .timeline-item {
+            display: flex;
+            position: relative;
+            margin-bottom: 60px; /* Space between items */
+            padding: 10px 0; /* Vertical padding within item */
+        }
+
+        .timeline-item:last-child {
+            margin-bottom: 0; /* No margin after last item */
+        }
+
+        /* Left side items (1st, 3rd, 5th, etc.) */
+        .timeline-item:nth-child(odd) {
+            justify-content: flex-end; /* Pushes content to the right edge of its half */
+            padding-right: calc(50% + 40px); /* Space for marker and pushes content to left half */
+            text-align: right;
+        }
+
+        /* Right side items (2nd, 4th, 6th, etc.) */
+        .timeline-item:nth-child(even) {
+            justify-content: flex-start; /* Pushes content to the left edge of its half */
+            padding-left: calc(50% + 40px); /* Space for marker and pushes content to right half */
+            text-align: left;
+        }
+
+        .timeline-content {
+            width: 100%; /* Take full available space within its half */
+            max-width: 350px; /* Limit content width for readability */
+        }
+
+        .timeline-date {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-family: 'VT323', monospace;
+            font-size: 1.25em; /* Increased from 1.1em to 1.25em */
+            color: #B45309; /* Retro brown/amber for dates */
+            white-space: nowrap; /* Prevent date from wrapping */
+        }
+
+        .timeline-item:nth-child(odd) .timeline-date {
+            left: calc(50% + 50px); /* Position date to the right of the line for left content */
+        }
+
+        .timeline-item:nth-child(even) .timeline-date {
+            right: calc(50% + 50px); /* Position date to the left of the line for right content */
+        }
+
+        .timeline-dot {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: #B45309; /* Start with base amber color */
+            border: 4px solid black; /* Black border */
+            border-radius: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); /* Center perfectly on the line */
+            top: 50%; /* Vertical centering */
+            z-index: 2; /* On top of lines */
+            transition: all 0.3s ease; /* Smooth transition for glow effect */
+        }
+
+        /* Active timeline dot with neon glow effect */
+        .timeline-dot.active {
+            background-color: #F6781E; /* Bright orange when active */
+            box-shadow: 
+                0 0 10px #F6781E,     /* Inner glow */
+                0 0 20px #F6781E,     /* Medium glow */
+                0 0 30px #F6781E,     /* Outer glow */
+                0 0 40px #FF8C00,     /* Extended glow */
+                0 0 50px #FFD700;     /* Golden outer glow */
+            animation: dotNeonPulse 1.5s ease-in-out infinite alternate; /* Pulsing effect */
+        }
+
+        /* Neon glow animation for timeline progression */
+        @keyframes neonPulse {
+            from {
+                box-shadow: 
+                    0 0 10px #F6781E,
+                    0 0 20px #F6781E,
+                    0 0 30px #F6781E,
+                    0 0 40px #FF8C00;
+            }
+            to {
+                box-shadow: 
+                    0 0 15px #F6781E,
+                    0 0 25px #F6781E,
+                    0 0 35px #F6781E,
+                    0 0 50px #FF8C00,
+                    0 0 60px #FFD700; /* Add golden glow at peak */
+            }
+        }
+
+        /* Neon glow animation for timeline dots */
+        @keyframes dotNeonPulse {
+            from {
+                box-shadow: 
+                    0 0 10px #F6781E,
+                    0 0 20px #F6781E,
+                    0 0 30px #F6781E,
+                    0 0 40px #FF8C00,
+                    0 0 50px #FFD700;
+            }
+            to {
+                box-shadow: 
+                    0 0 15px #F6781E,
+                    0 0 25px #F6781E,
+                    0 0 40px #F6781E,
+                    0 0 55px #FF8C00,
+                    0 0 70px #FFD700; /* Stronger golden glow for dots */
+            }
+        }
+
+        /* Responsive adjustments for mobile */
+        @media (max-width: 768px) {
+            .timeline {
+                padding: 20px 0;
+            }
+
+            .timeline-line-base, .timeline-line-fill {
+                left: 20px; /* Move line to the left edge */
+                transform: none;
+            }
+
+            .timeline-item {
+                flex-direction: column; /* Stack elements vertically */
+                align-items: flex-start; /* Align all content to the left */
+                padding-left: 50px; /* Make space for line and dot */
+                padding-right: 0;
+                text-align: left;
+                margin-bottom: 40px; /* Adjust spacing */
+            }
+
+            .timeline-item:nth-child(odd),
+            .timeline-item:nth-child(even) {
+                padding-left: 50px; /* Consistent padding for all items */
+                padding-right: 0;
+                text-align: left;
+                justify-content: flex-start;
+            }
+
+            .timeline-content {
+                width: 100%; /* Full width */
+                max-width: none; /* Remove max-width constraint */
+                margin-bottom: 5px; /* Space between content and date */
+            }
+
+            .timeline-dot {
+                left: 20px; /* Align dot with the line */
+                transform: translate(-50%, -50%); /* Re-center relative to new left */
+            }
+
+            .timeline-date {
+                position: static; /* Remove absolute positioning */
+                transform: none;
+                font-size: 0.9em; /* Smaller date font */
+                color: #6B7280; /* Subdued date color for mobile */
+                margin-top: 5px; /* Space between content and date */
+                margin-left: 0;
+            }
+
+            /* Adjust placement of date for odd/even in mobile */
+            .timeline-item:nth-child(odd) .timeline-date,
+            .timeline-item:nth-child(even) .timeline-date {
+                left: auto;
+                right: auto;
+                text-align: left;
+            }
+        }
+
+        /* --- Terminal Loader Styles --- */
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #F0EAD6; /* Match body background */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999; /* Ensure it's on top of everything */
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        #loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none; /* Allow clicks through once hidden */
+        }
+
+        .terminal-loader {
+            border: 0.1em solid #B45309; /* Retro amber border */
+            background-color: #1a1a1a; /* Dark background */
+            color: #0f0; /* Green text for terminal effect */
+            font-family: 'VT323', monospace; /* Pixelated font for terminal */
+            font-size: 1.5em; /* Slightly larger for readability */
+            padding: 1.5em 1em;
+            width: 15em; /* Adjusted width */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+            position: relative;
+            overflow: hidden;
+            box-sizing: border-box;
+            text-align: left; /* Ensure text aligns left within loader */
+        }
+
+        .terminal-header {
+            /* Changed to flexbox for better control over alignment */
+            display: flex;
+            justify-content: space-between; /* Pushes items to ends */
+            align-items: center; /* Vertically centers items */
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1.5em;
+            background-color: #333;
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
+            padding: 0 0.4em;
+            box-sizing: border-box;
+        }
+
+        .control-buttons { /* Renamed from .terminal-controls to match HTML */
+            display: flex; /* Use flex to align controls */
+            gap: 0.4em; /* Space between control dots */
+        }
+
+        .control {
+            display: inline-block;
+            width: 0.6em;
+            height: 0.6em;
+            /* margin-left: 0.4em; Removed as gap handles spacing */
+            border-radius: 50%;
+            background-color: #777;
+        }
+
+        .control.close {
+            background-color: #e33;
+        }
+
+        .control.minimize {
+            background-color: #ee0;
+        }
+
+        .control.maximize {
+            background-color: #0b0;
+        }
+
+        .terminal-title {
+            /* float: left; Removed as flexbox handles alignment */
+            line-height: 1.5em;
+            color: #eee;
+        }
+
+        /* Modified .text for JavaScript typing effect */
+        .text {
+            display: inline-block;
+            white-space: nowrap;
+            overflow: hidden;
+            border-right: 0.2em solid green; /* Cursor */
+            margin-top: 1.5em; /* Space below header */
+            /* Removed CSS animations for typing here, handled by JS */
+            animation: blinkCursor 0.5s step-end infinite alternate; /* Only cursor blinking remains */
+        }
+
+        @keyframes blinkCursor {
+            50% {
+                border-right-color: transparent;
+            }
+        }
+
+        /* --- Interactive Terminal Styles (Updated) --- */
+        .interactive-terminal {
+            background-color: #1a1a1a;
+            border: 2px solid #B45309; /* Retro amber border */
+            border-radius: 8px;
+            margin-top: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 6px 6px 0px #2f2e41; /* Dark retro shadow */
+            font-family: 'VT323', monospace;
+            font-size: 1.1em;
+            color: #0f0; /* Green terminal text */
+            overflow: hidden; /* For typing effect */
+            position: relative; /* For header positioning */
+        }
+
+        .interactive-terminal .terminal-header {
+            position: static; /* Override absolute positioning from loader */
+            margin-bottom: 15px; /* Space between header and content */
+        }
+
+        .interactive-terminal .terminal-output {
+            min-height: 150px; /* Ensure enough space for output */
+            max-height: 300px;
+            overflow-y: auto; /* Scroll for long output */
+            margin-bottom: 10px;
+            padding: 0 20px; /* Padding for content inside terminal */
+            white-space: pre-wrap; /* Preserve whitespace and wrap text */
+            word-break: break-word; /* Break long words */
+        }
+
+        .terminal-input-line {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 10px;
+            padding: 0 20px 20px; /* Padding for input line */
+        }
+
+        .terminal-prompt {
+            color: #FFD700; /* Gold/Yellow prompt */
+            flex-shrink: 0; /* Prevent prompt from shrinking */
+        }
+
+        .terminal-input {
+            background: none;
+            border: none;
+            outline: none;
+            color: #0f0; /* Green input text */
+            flex-grow: 1; /* Take up remaining space */
+            font-family: 'VT323', monospace;
+            font-size: 1em;
+            padding: 2px 0;
+        }
+
+        .terminal-input::selection {
+            background-color: #008000; /* Green selection background */
+            color: #fff;
+        }
+
+        .terminal-input::-moz-selection {
+            background-color: #008000;
+            color: #fff;
+        }
+
+        .terminal-input-cursor {
+            border-right: 0.2em solid green; /* Blinking cursor */
+            animation: blinkCursor 0.5s step-end infinite;
+        }
+
+        .terminal-enter-button {
+            background: #B45309; /* Retro brown/amber */
+            color: #fff;
+            border: 2px solid #2f2e41; /* Dark border */
+            border-radius: 5px;
+            padding: 5px 15px;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.9em;
+            cursor: pointer;
+            box-shadow: 2px 2px 0px #2f2e41;
+            transition: all 0.1s ease;
+        }
+
+        .terminal-enter-button:hover {
+            background: #df6108; /* Darker orange on hover */
+        }
+
+        .terminal-enter-button:active {
+            box-shadow: 0px 0px 0px #2f2e41;
+            transform: translateY(2px);
+        }
+
+        /* Style for typed output in terminal */
+        .typed-line {
+            display: block; /* Each fact on a new line */
+            white-space: pre-wrap;
+            word-break: break-word;
+            margin-bottom: 5px; /* Space between facts */
+        }
+
+        /* Mobile Navigation Styles */
+        .hamburger-menu {
+            display: none; /* Hidden by default on desktop */
+            flex-direction: column;
+            justify-content: space-around;
+            width: 30px;
+            height: 25px;
+            cursor: pointer;
+            z-index: 20; /* Above navbar content */
+        }
+
+        .hamburger-menu span {
+            display: block;
+            width: 100%;
+            height: 3px;
+            background-color: #fcd34d; /* Tailwind yellow-300 for hamburger icon */
+            border-radius: 2px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .mobile-nav-links {
+            display: none; /* Hidden by default */
+            position: absolute;
+            top: 100%; /* Position below the navbar */
+            left: 0;
+            width: 100%;
+            background-color: #B45309; /* Darker background for dropdown */
+            flex-direction: column;
+            align-items: center;
+            padding: 15px 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 10; /* Below fixed navbar */
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+        }
+
+        .mobile-nav-links.active {
+            display: flex; /* Show when active */
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .mobile-nav-links a {
+            color: #fff;
+            padding: 10px 20px;
+            width: 100%;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .mobile-nav-links a:last-child {
+            border-bottom: none;
+        }
+
+        .mobile-nav-links a:hover {
+            background-color: #df6108; /* Hover effect for dropdown items */
+        }
+
+        /* Media query for mobile view */
+        @media (max-width: 768px) {
+            .navbar-links {
+                display: none; /* Hide desktop links on mobile */
+            }
+            .hamburger-menu {
+                display: flex; /* Show hamburger on mobile */
+            }
+        }
+
+        /* --- Retro Flip Card Styles (from Uiverse.io by alexruix, adapted) --- */
+        .about-card { /* Renamed to avoid conflict with new project card .card */
+            color: #1b1b1b;
+            width: 300px; /* Increased width */
+            height: 380px; /* Increased height */
+            position: relative;
+            outline: 6px solid #c25207f3;
+            border-radius: 8px;
+            line-height: 150%;
+            background: #ff930f; /* Fallback for card background */
+            background-blend-mode: multiply;
+            background: linear-gradient(to top, #ff930f, #ffcc33);
+            transition: background-color 1s ease-in-out;
+            overflow: hidden; /* Important to hide sliding content */
+        }
+
+        .about-card-front, .about-card-back { /* Renamed to avoid conflict */
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex; /* Use flex to center content */
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+            box-sizing: border-box; /* Include padding in width/height */
+            text-align: center;
+            transition: transform 1s cubic-bezier(0.785, 0.135, 0.150, 0.860);
+        }
+
+        .about-card-front { /* Renamed to avoid conflict */
+            z-index: 2; /* Ensure front is on top initially */
+            background: none; /* No background for the front, let image show */
+        }
+
+        .about-card-front img { /* Renamed to avoid conflict */
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Ensure image covers the area */
+            border-radius: 8px; /* Match card border-radius */
+            position: absolute; /* Fill the parent .card-front */
+            top: 0;
+            left: 0;
+        }
+
+        .about-card-back { /* Renamed to avoid conflict */
+            z-index: 1; /* Back is behind initially */
+            transform: translateX(120%); /* Start off-screen to the right */
+            background: #ff930f; /* Background for the back side */
+            background-blend-mode: multiply;
+            background: linear-gradient(to top, #ff930f, #ffcc33); /* Gradient for the back side */
+        }
+
+        /*Text*/
+        .about-card .title { /* Specificity for about card title */
+            font-size: 1.6rem; /* Increased font size */
+            font-weight: bold;
+            font-family: 'VT323', monospace; /* Apply pixelated font */
+        }
+        .about-card .subtitle { /* Specificity for about card subtitle */
+            font-family: 'Space Mono', monospace; /* Apply retro font */
+            font-size: 1.1rem; /* Increased font size */
+            margin-bottom: 15px; /* Increased margin */
+        }
+        .about-card-back p:last-child { /* For the description text */
+            font-family: 'Space Mono', monospace;
+            font-size: 1rem; /* Increased font size */
+            line-height: 1.5;
+            padding: 0 10px; /* Added horizontal padding for text */
+        }
+
+        /*Text divider*/
+        .about-card .title::after { /* Specificity for about card title divider */
+            content: "";
+            display: block;
+            width: 50%;
+            border-radius: 50%;
+            height: 2px;
+            margin: 2px auto;
+            background-color: #1b1b1b;
+        }
+
+        /*Hover*/
+        .about-card:hover { /* Specificity for about card hover */
+            background-color: #1b1b1b25; /* Subtle background change on hover */
+        }
+
+        .about-card:hover .about-card-front { /* Specificity for about card front hover */
+            transform: translateX(-100%); /* Slide front out to the left */
+        }
+
+        .about-card:hover .about-card-back { /* Specificity for about card back hover */
+            transform: translateX(0); /* Slide back in from the right */
+        }
+
+
+        /* Styles for the skills grid */
+        .skills-grid {
+            margin-top: 40px; /* Space below heading */
+            /* Grid classes already applied in HTML: grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 */
+        }
+
+        .skills-grid .skill-card {
+            /* Re-using .retro-card and .skill-card styles */
+            padding: 15px; /* Adjust padding for better look */
+        }
+        .skills-grid .skill-card img {
+            width: 50px; /* Adjust icon size */
+            height: 50px;
+            margin: 0 auto 10px auto; /* Center image and add bottom margin */
+        }
+        .skills-grid .skill-card p {
+            font-size: 1.1em; /* Adjust skill name font size */
+        }
+        /* Social icons styling */
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem; /* Space between icons */
+            margin-top: 2rem; /* Space below the subtitle */
+            margin-bottom: 2rem; /* Space above the button */
+        }
+
+        .social-icons a {
+            display: block;
+            width: 48px; /* Icon size */
+            height: 48px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.2); /* Light background for icons */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out;
+        }
+
+        .social-icons a:hover {
+            transform: translateY(-5px) scale(1.1);
+            background-color: rgba(255, 255, 255, 0.4); /* Slightly more opaque on hover */
+        }
+
+        .social-icons img, .social-icons svg { /* Added svg to apply filter to inline SVGs */
+            width: 32px; /* Image size within the circle */
+            height: 32px;
+            filter: invert(100%); /* Make icons white if they are dark */
+        }
+
+        /* --- Scrolling Text Effect --- */
+        .static-text {
+            display: inline;
+        }
+
+        .scrolling-text {
+            display: inline-block;
+            position: relative;
+            vertical-align: top;
+            min-width: 400px; /* Minimum width to prevent layout shift */
+            height: 1.2em; /* Set a fixed height to contain the text */
+            overflow: visible; /* Allow text to be visible */
+        }
+
+        .text-item {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            opacity: 0;
+            transform: translateY(100%);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            white-space: nowrap;
+        }
+
+        .text-item.active {
+            opacity: 1;
+            transform: translateY(0);
+            position: relative; /* Make the active item take up space */
+        }
+
+        .text-item.exit-up {
+            opacity: 0;
+            transform: translateY(-100%);
+        }
+
+        .text-item.enter-down {
+            opacity: 0;
+            transform: translateY(100%);
+        }
+
+        /* Typing cursor effect */
+        .scrolling-text::after {
+            content: '|';
+            display: inline-block;
+            position: absolute;
+            right: -10px;
+            top: 0;
+            color: #FFD700; /* Golden cursor */
+            animation: blinkTypingCursor 1s infinite;
+            font-weight: normal;
+        }
+
+        @keyframes blinkTypingCursor {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        /* Responsive adjustments for scrolling text */
+        @media (max-width: 768px) {
+            .scrolling-text {
+                min-width: 280px; /* Smaller minimum width on mobile */
+                height: 1.1em; /* Adjust height for smaller screens */
+            }
+            
+            .scrolling-text::after {
+                right: -8px; /* Adjust cursor position */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .scrolling-text {
+                min-width: 240px; /* Even smaller on very small screens */
+                height: 1em; /* Even smaller height */
+            }
+        }
+
+        /* --- Hero Profile Picture Styles with Material You Effects --- */
+        .hero-profile-pic {
+            width: 200px; /* Increased from 150px */
+            height: 200px; /* Increased from 150px */
+            object-fit: cover;
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); /* Material Design easing */
+            box-shadow: 
+                0 8px 32px rgba(255, 211, 0, 0.3), /* Golden glow */
+                0 4px 16px rgba(0, 0, 0, 0.15), /* Depth shadow */
+                0 0 0 4px rgba(255, 255, 255, 0.1); /* Subtle border ring */
+            filter: brightness(1.05) contrast(1.1) saturate(1.15); /* Enhanced colors */
+            backdrop-filter: blur(0px);
+            animation: materialFloat 6s ease-in-out infinite;
+        }
+
+        /* Material You hover effects */
+        .hero-profile-pic:hover {
+            transform: scale(1.08) translateY(-8px);
+            box-shadow: 
+                0 16px 48px rgba(255, 211, 0, 0.4), /* Stronger golden glow */
+                0 8px 24px rgba(0, 0, 0, 0.2), /* Deeper shadow */
+                0 0 0 6px rgba(255, 255, 255, 0.2), /* Larger border ring */
+                0 0 60px rgba(255, 165, 0, 0.3); /* Ambient glow */
+            filter: brightness(1.15) contrast(1.2) saturate(1.3);
+        }
+
+        /* Material You floating animation */
+        @keyframes materialFloat {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+                filter: brightness(1.05) contrast(1.1) saturate(1.15) hue-rotate(0deg);
+            }
+            25% {
+                transform: translateY(-4px) rotate(0.5deg);
+                filter: brightness(1.1) contrast(1.15) saturate(1.2) hue-rotate(2deg);
+            }
+            50% {
+                transform: translateY(-2px) rotate(0deg);
+                filter: brightness(1.08) contrast(1.12) saturate(1.18) hue-rotate(4deg);
+            }
+            75% {
+                transform: translateY(-6px) rotate(-0.5deg);
+                filter: brightness(1.12) contrast(1.18) saturate(1.25) hue-rotate(2deg);
+            }
+        }
+
+        /* Material ripple effect container */
+        .hero-profile-pic::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 211, 0, 0.4) 0%, transparent 70%);
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .hero-profile-pic:hover::before {
+            width: 120%;
+            height: 120%;
+            opacity: 1;
+            animation: materialRipple 1.2s ease-out;
+        }
+
+        @keyframes materialRipple {
+            0% {
+                width: 0;
+                height: 0;
+                opacity: 0.8;
+            }
+            50% {
+                opacity: 0.4;
+            }
+            100% {
+                width: 120%;
+                height: 120%;
+                opacity: 0;
+            }
+        }
+
+        /* Dynamic color accent (Material You style) */
+        .hero-profile-pic::after {
+            content: '';
+            position: absolute;
+            inset: -8px;
+            border-radius: 50%;
+            background: conic-gradient(
+                from 0deg,
+                #FFD700 0deg,
+                #FF8C00 72deg,
+                #FF4500 144deg,
+                #DC143C 216deg,
+                #8A2BE2 288deg,
+                #FFD700 360deg
+            );
+            z-index: -2;
+            opacity: 0.6;
+            filter: blur(8px);
+            animation: materialSpin 8s linear infinite;
+        }
+
+        @keyframes materialSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Responsive adjustments for hero profile picture */
+        @media (max-width: 768px) {
+            .hero-profile-pic {
+                width: 160px; /* Increased from 120px */
+                height: 160px;
+            }
+            
+            .hero-profile-pic:hover {
+                transform: scale(1.05) translateY(-4px); /* Reduced scale on mobile */
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .hero-profile-pic {
+                width: 240px; /* Increased from 180px */
+                height: 240px;
+            }
+        }
