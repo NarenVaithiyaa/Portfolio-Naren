@@ -1,0 +1,1 @@
+A simple portfolio page with a retro theme made using html, css and javascript. Explore the repo to find the .html, .css and .js files, fork them and play around with the website / make one for yourself.
